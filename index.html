@@ -1,171 +1,520 @@
 <!doctype html>
 <html lang="cs">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Body hráčů</title>
-  <style>
-    *{
-      box-sizing:border-box;
-    }
-    body{
-      margin:0;
-      font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:#0f172a;
-      color:#e5e7eb;
-    }
-    .wrap{
-      max-width:700px;
-      margin:0 auto;
-      padding:16px;
-    }
-    h1{
-      font-size:1.2rem;
-      margin:0 0 12px;
-      text-align:center;
-    }
-    #players{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .player-row{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      width:100%;
-    }
-    .player-row input[type="text"]{
-      flex:1;
-      padding:10px;
-      border-radius:10px;
-      border:none;
-      background:#111827;
-      color:#e5e7eb;
-      font-size:1rem;
-    }
-    .player-row input::placeholder{
-      color:#6b7280;
-    }
-    .score-box{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      min-width:130px;
-      max-width:160px;
-      width:45%;
-      background:#111827;
-      border-radius:10px;
-      padding:6px;
-    }
-    .score-btn{
-      width:40px;
-      height:40px;
-      border:none;
-      border-radius:999px;
-      font-size:1.4rem;
-      font-weight:600;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      background:#1f2937;
-      color:#e5e7eb;
-      box-shadow:0 2px 4px rgba(0,0,0,.5);
-    }
-    .score-btn:active{
-      transform:translateY(1px);
-      box-shadow:0 1px 2px rgba(0,0,0,.5);
-    }
-    .score-value{
-      flex:1;
-      text-align:center;
-      font-size:1.2rem;
-      font-variant-numeric:tabular-nums;
-    }
-    #addPlayer{
-      margin-top:14px;
-      width:100%;
-      padding:12px;
-      border:none;
-      border-radius:999px;
-      font-size:1.1rem;
-      font-weight:600;
-      cursor:pointer;
-      background:#22c55e;
-      color:#052e16;
-      box-shadow:0 3px 8px rgba(0,0,0,.5);
-    }
-    #addPlayer:active{
-      transform:translateY(1px);
-      box-shadow:0 1px 3px rgba(0,0,0,.6);
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Počítadlo bodů</title>
+<style>
+  :root{
+    --bg:#020617;
+    --panel:#0b1220;
+    --panel-soft:#111827;
+    --accent:#38bdf8;
+    --accent2:#4ade80;
+    --text:#e5e7eb;
+    --muted:#9ca3af;
+    --danger:#f97373;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:radial-gradient(circle at top,#1e293b,#020617 55%);
+    color:var(--text);
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:16px;
+  }
+  .app{
+    width:100%;
+    max-width:700px;
+    margin-top:12px;
+  }
+  h1,h2,h3{margin:0 0 12px;font-weight:600}
+  .card{
+    background:var(--panel);
+    border-radius:var(--radius);
+    padding:16px 16px 20px;
+    box-shadow:0 18px 40px rgba(15,23,42,.7);
+  }
+  .sub{
+    color:var(--muted);
+    font-size:0.9rem;
+    margin-bottom:16px;
+  }
+  .menu-buttons{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:8px;
+  }
+  .btn{
+    border:none;
+    border-radius:999px;
+    padding:10px 18px;
+    font-size:1rem;
+    font-weight:500;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:transform .08s ease, box-shadow .08s ease, background .15s ease;
+  }
+  .btn-main{
+    background:linear-gradient(135deg,#38bdf8,#6366f1);
+    color:white;
+    box-shadow:0 10px 20px rgba(37,99,235,.6);
+  }
+  .btn-secondary{
+    background:var(--panel-soft);
+    color:var(--text);
+    border:1px solid #1f2937;
+  }
+  .btn-ghost{
+    background:transparent;
+    color:var(--muted);
+    border:1px solid #1f2937;
+  }
+  .btn-success{
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:white;
+  }
+  .btn-danger{
+    background:var(--danger);
+    color:#111827;
+  }
+  .btn:active{
+    transform:translateY(1px) scale(.99);
+    box-shadow:none;
+  }
+
+  .hidden{display:none;}
+
+  .top-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+  }
+  .top-title{
+    font-size:1.1rem;
+    font-weight:600;
+  }
+  .top-right{
+    display:flex;
+    gap:8px;
+  }
+
+  /* hráči */
+  .players{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:10px;
+  }
+  .player-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--panel-soft);
+    border-radius:var(--radius);
+    padding:8px 10px;
+  }
+  .player-name{
+    flex:2;
+    min-width:0;
+  }
+  .player-name input{
+    width:100%;
+    background:#020617;
+    border-radius:999px;
+    border:1px solid #1f2937;
+    padding:6px 10px;
+    color:var(--text);
+    font-size:0.95rem;
+  }
+  .pill{
+    min-width:44px;
+    text-align:center;
+    padding:4px 8px;
+    border-radius:999px;
+    background:#020617;
+    border:1px solid #1f2937;
+    font-variant-numeric:tabular-nums;
+    font-size:0.9rem;
+  }
+  .pill-total{
+    background:#022c22;
+    border-color:#16a34a;
+    color:#bbf7d0;
+  }
+  .pill-round{
+    background:#020617;
+    border-color:#1f2937;
+  }
+  .btn-mini{
+    min-width:32px;
+    height:32px;
+    border-radius:999px;
+    border:none;
+    background:#020617;
+    color:var(--text);
+    font-size:1.2rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:transform .08s ease, background .1s ease;
+  }
+  .btn-mini:active{transform:translateY(1px) scale(.96);}
+  .btn-minus{background:#0f172a;}
+  .btn-plus{background:#0ea5e9;}
+  .btn-plus-round{background:#22c55e;}
+  .footer-bar{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:14px;
+  }
+  .btn-add{
+    flex:1;
+  }
+  .btn-next-round{
+    flex:1;
+  }
+
+  /* numerická klávesnice */
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.8);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:50;
+  }
+  .keypad{
+    width:100%;
+    max-width:260px;
+    background:var(--panel);
+    border-radius:20px;
+    padding:14px;
+    box-shadow:0 22px 45px rgba(15,23,42,.9);
+  }
+  .keypad-display{
+    background:#020617;
+    border-radius:12px;
+    padding:8px 10px;
+    margin-bottom:10px;
+    text-align:right;
+    font-size:1.4rem;
+    font-variant-numeric:tabular-nums;
+  }
+  .keypad-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
+    margin-bottom:8px;
+  }
+  .key-button{
+    border:none;
+    border-radius:999px;
+    padding:10px 0;
+    font-size:1.1rem;
+    background:#0f172a;
+    color:var(--text);
+    cursor:pointer;
+  }
+  .key-button:active{transform:translateY(1px) scale(.97);}
+  .key-small{font-size:0.85rem;}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Body hráčů</h1>
-    <div id="players"></div>
-    <button id="addPlayer">＋ Přidat hráče</button>
+<div class="app">
+
+  <!-- MENU -->
+  <section id="view-menu" class="card">
+    <h1>Počítadlo bodů</h1>
+    <p class="sub">Vyber typ počítadla, který chceš použít.</p>
+    <div class="menu-buttons">
+      <button class="btn btn-main" id="btnToSimple">Jednoduché počítadlo</button>
+      <button class="btn btn-secondary" id="btnToRounds">Počítadlo na kola</button>
+    </div>
+  </section>
+
+  <!-- JEDNODUCHÉ POČÍTADLO -->
+  <section id="view-simple" class="card hidden">
+    <div class="top-bar">
+      <div class="top-title">Jednoduché počítadlo</div>
+      <div class="top-right">
+        <button class="btn btn-ghost" id="btnBackFromSimple">Zpět</button>
+      </div>
+    </div>
+    <p class="sub">Každý hráč má jedno číslo bodů. Plus/mínus hodnotu mění přímo.</p>
+    <div id="simplePlayers" class="players"></div>
+    <div class="footer-bar">
+      <button class="btn btn-secondary btn-add" id="btnAddSimple">+ Přidat hráče</button>
+      <button class="btn btn-danger" id="btnResetSimple">Vynulovat</button>
+    </div>
+  </section>
+
+  <!-- POČÍTADLO NA KOLA -->
+  <section id="view-rounds" class="card hidden">
+    <div class="top-bar">
+      <div class="top-title">Počítadlo na kola</div>
+      <div class="top-right">
+        <button class="btn btn-ghost" id="btnBackFromRounds">Zpět</button>
+      </div>
+    </div>
+    <p class="sub">
+      Každý hráč má <strong>celkové body</strong> a <strong>body v aktuálním kole</strong>.  
+      Tlačítko <em>Další kolo</em> přičte body z tohoto kola k celkovým bodům.
+    </p>
+    <div id="roundPlayers" class="players"></div>
+    <div class="footer-bar">
+      <button class="btn btn-secondary btn-add" id="btnAddRound">+ Přidat hráče</button>
+      <button class="btn btn-success btn-next-round" id="btnNextRound">Další kolo</button>
+    </div>
+  </section>
+
+  <!-- NUMERICKÁ KLÁVESNICE -->
+  <div id="keypadOverlay" class="overlay hidden">
+    <div class="keypad">
+      <div id="keypadDisplay" class="keypad-display">0</div>
+      <div class="keypad-grid">
+        <button class="key-button">7</button>
+        <button class="key-button">8</button>
+        <button class="key-button">9</button>
+        <button class="key-button">4</button>
+        <button class="key-button">5</button>
+        <button class="key-button">6</button>
+        <button class="key-button">1</button>
+        <button class="key-button">2</button>
+        <button class="key-button">3</button>
+        <button class="key-button key-small" data-action="minus">±</button>
+        <button class="key-button">0</button>
+        <button class="key-button key-small" data-action="back">⌫</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:6px;">
+        <button class="btn btn-ghost" id="keypadCancel" style="flex:1;">Zrušit</button>
+        <button class="btn btn-main" id="keypadOk" style="flex:1;">OK</button>
+      </div>
+    </div>
   </div>
 
-  <script>
-    const playersContainer = document.getElementById('players');
-    const addBtn = document.getElementById('addPlayer');
+</div>
 
-    function createPlayerRow(index){
+<script>
+  // Přepínání pohledů
+  const viewMenu = document.getElementById('view-menu');
+  const viewSimple = document.getElementById('view-simple');
+  const viewRounds = document.getElementById('view-rounds');
+
+  document.getElementById('btnToSimple').onclick = () => showView('simple');
+  document.getElementById('btnToRounds').onclick = () => showView('rounds');
+  document.getElementById('btnBackFromSimple').onclick = () => showView('menu');
+  document.getElementById('btnBackFromRounds').onclick = () => showView('menu');
+
+  function showView(which){
+    viewMenu.classList.add('hidden');
+    viewSimple.classList.add('hidden');
+    viewRounds.classList.add('hidden');
+    if(which === 'simple') viewSimple.classList.remove('hidden');
+    else if(which === 'rounds') viewRounds.classList.remove('hidden');
+    else viewMenu.classList.remove('hidden');
+  }
+
+  // ---------- Jednoduché počítadlo ----------
+  const simpleContainer = document.getElementById('simplePlayers');
+  let simplePlayers = [];
+  let simpleIdCounter = 1;
+
+  document.getElementById('btnAddSimple').onclick = () => addSimplePlayer();
+  document.getElementById('btnResetSimple').onclick = () => {
+    simplePlayers.forEach(p => p.score = 0);
+    renderSimple();
+  };
+
+  function addSimplePlayer(){
+    const p = {id:simpleIdCounter++, name:'', score:0};
+    simplePlayers.push(p);
+    renderSimple();
+  }
+
+  function renderSimple(){
+    simpleContainer.innerHTML = '';
+    simplePlayers.forEach(p => {
       const row = document.createElement('div');
       row.className = 'player-row';
 
+      const nameWrap = document.createElement('div');
+      nameWrap.className = 'player-name';
       const input = document.createElement('input');
-      input.type = 'text';
-      input.placeholder = 'Jméno hráče ' + index;
-
-      const scoreBox = document.createElement('div');
-      scoreBox.className = 'score-box';
+      input.placeholder = 'Jméno hráče';
+      input.value = p.name;
+      input.oninput = () => { p.name = input.value; };
+      nameWrap.appendChild(input);
 
       const minusBtn = document.createElement('button');
-      minusBtn.className = 'score-btn';
+      minusBtn.className = 'btn-mini btn-minus';
       minusBtn.textContent = '−';
+      minusBtn.onclick = () => { p.score--; renderSimple(); };
 
-      const valueSpan = document.createElement('span');
-      valueSpan.className = 'score-value';
-      valueSpan.textContent = '0';
+      const scoreSpan = document.createElement('div');
+      scoreSpan.className = 'pill';
+      scoreSpan.textContent = p.score;
 
       const plusBtn = document.createElement('button');
-      plusBtn.className = 'score-btn';
+      plusBtn.className = 'btn-mini btn-plus';
       plusBtn.textContent = '+';
+      plusBtn.onclick = () => { p.score++; renderSimple(); };
 
-      minusBtn.addEventListener('click', () => {
-        let v = parseInt(valueSpan.textContent, 10);
-        valueSpan.textContent = v - 1;
-      });
+      row.appendChild(nameWrap);
+      row.appendChild(minusBtn);
+      row.appendChild(scoreSpan);
+      row.appendChild(plusBtn);
 
-      plusBtn.addEventListener('click', () => {
-        let v = parseInt(valueSpan.textContent, 10);
-        valueSpan.textContent = v + 1;
-      });
+      simpleContainer.appendChild(row);
+    });
+  }
 
-      scoreBox.appendChild(minusBtn);
-      scoreBox.appendChild(valueSpan);
-      scoreBox.appendChild(plusBtn);
+  // ---------- Počítadlo na kola ----------
+  const roundContainer = document.getElementById('roundPlayers');
+  let roundPlayers = [];
+  let roundIdCounter = 1;
 
-      row.appendChild(input);
-      row.appendChild(scoreBox);
+  document.getElementById('btnAddRound').onclick = () => addRoundPlayer();
+  document.getElementById('btnNextRound').onclick = () => {
+    roundPlayers.forEach(p => {
+      p.total += p.round;
+      p.round = 0;
+    });
+    renderRounds();
+  };
 
-      return row;
+  function addRoundPlayer(){
+    const p = {id:roundIdCounter++, name:'', total:0, round:0};
+    roundPlayers.push(p);
+    renderRounds();
+  }
+
+  function renderRounds(){
+    roundContainer.innerHTML = '';
+    roundPlayers.forEach(p => {
+      const row = document.createElement('div');
+      row.className = 'player-row';
+
+      const nameWrap = document.createElement('div');
+      nameWrap.className = 'player-name';
+      const input = document.createElement('input');
+      input.placeholder = 'Jméno hráče';
+      input.value = p.name;
+      input.oninput = () => { p.name = input.value; };
+      nameWrap.appendChild(input);
+
+      const totalSpan = document.createElement('div');
+      totalSpan.className = 'pill pill-total';
+      totalSpan.textContent = p.total;
+
+      const minusBtn = document.createElement('button');
+      minusBtn.className = 'btn-mini btn-minus';
+      minusBtn.textContent = '−';
+      minusBtn.onclick = () => { p.round--; renderRounds(); };
+
+      const roundSpan = document.createElement('div');
+      roundSpan.className = 'pill pill-round';
+      roundSpan.textContent = p.round;
+      roundSpan.style.cursor = 'pointer';
+      roundSpan.onclick = () => openKeypadFor(p.id);
+
+      const plusBtn = document.createElement('button');
+      plusBtn.className = 'btn-mini btn-plus-round';
+      plusBtn.textContent = '+';
+      plusBtn.onclick = () => { p.round++; renderRounds(); };
+
+      row.appendChild(nameWrap);
+      row.appendChild(totalSpan);
+      row.appendChild(minusBtn);
+      row.appendChild(roundSpan);
+      row.appendChild(plusBtn);
+
+      roundContainer.appendChild(row);
+    });
+  }
+
+  // ---------- Numerická klávesnice pro úpravu bodů v kole ----------
+  const overlay = document.getElementById('keypadOverlay');
+  const display = document.getElementById('keypadDisplay');
+  const keys = overlay.querySelectorAll('.key-button');
+  const btnOk = document.getElementById('keypadOk');
+  const btnCancel = document.getElementById('keypadCancel');
+  let currentPlayerId = null;
+  let currentValue = '0';
+
+  function openKeypadFor(playerId){
+    currentPlayerId = playerId;
+    const p = roundPlayers.find(x => x.id === playerId);
+    currentValue = String(p.round);
+    display.textContent = currentValue;
+    overlay.classList.remove('hidden');
+  }
+
+  function closeKeypad(apply){
+    if(apply && currentPlayerId != null){
+      const p = roundPlayers.find(x => x.id === currentPlayerId);
+      if(p){
+        const n = parseInt(currentValue,10);
+        if(!isNaN(n)) p.round = n;
+      }
+      renderRounds();
     }
+    overlay.classList.add('hidden');
+    currentPlayerId = null;
+  }
 
-    function addPlayer(){
-      const count = playersContainer.children.length + 1;
-      const row = createPlayerRow(count);
-      playersContainer.appendChild(row);
-    }
+  keys.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const act = btn.dataset.action;
+      if(act === 'minus'){
+        if(currentValue.startsWith('-')){
+          currentValue = currentValue.slice(1);
+        }else{
+          currentValue = currentValue === '0' ? '-0' : '-' + currentValue;
+        }
+      }else if(act === 'back'){
+        if(currentValue.length <= 1 || (currentValue.length === 2 && currentValue[0] === '-')){
+          currentValue = '0';
+        }else{
+          currentValue = currentValue.slice(0,-1);
+        }
+      }else{
+        const digit = btn.textContent.trim();
+        if(currentValue === '0'){
+          currentValue = digit;
+        }else if(currentValue === '-0'){
+          currentValue = '-' + digit;
+        }else{
+          currentValue += digit;
+        }
+      }
+      display.textContent = currentValue;
+    });
+  });
 
-    addBtn.addEventListener('click', addPlayer);
+  btnOk.onclick = () => closeKeypad(true);
+  btnCancel.onclick = () => closeKeypad(false);
 
-    // jeden hráč na začátku
-    addPlayer();
-  </script>
+  // Zavřít overlay kliknutím mimo klávesnici
+  overlay.addEventListener('click', e => {
+    if(e.target === overlay) closeKeypad(false);
+  });
+
+  // Start: ukážeme menu a po jednom hráči v každém módu
+  addSimplePlayer();
+  addRoundPlayer();
+</script>
 </body>
 </html>

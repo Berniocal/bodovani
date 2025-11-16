@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="cs">
 <head>
@@ -81,7 +82,7 @@
     align-items:center;
     gap:8px;
     background:#0f172a;
-    padding:10px;
+    padding:0px;
     border-radius:var(--radius);
   }
 
@@ -157,7 +158,7 @@
     color:var(--text);
     border:1px solid #1f2937;
   }
-  .btn-danger{background:var(--danger);color:white;}
+  .btn-danger{background:#f43f5e;color:white;}
   .btn-success{background:#16a34a;color:white;}
   .btn-export{background:#3b82f6;color:white;}
 
@@ -225,7 +226,7 @@
 <!-- Počítadlo na kola -->
 <div id="viewRounds" class="hidden">
 
-  <!-- 🔵 info o kole -->
+  <!-- info o kole -->
   <div class="round-info">
     <span>Aktuální kolo:</span>
     <span class="round-badge" id="roundNumber">1</span>
@@ -233,9 +234,14 @@
 
   <div id="roundPlayers" class="players"></div>
 
+  <!-- první řádek tlačítek -->
   <div class="footer-bar">
     <button class="btn btn-secondary" id="btnAddRound">+ Přidat hráče</button>
     <button class="btn btn-success" id="btnNextRound">Další kolo</button>
+  </div>
+  <!-- druhý řádek tlačítek -->
+  <div class="footer-bar">
+    <button class="btn btn-danger" id="btnResetRounds">Vynulovat všechny</button>
     <button class="btn btn-export" id="btnExportRounds">Export PDF</button>
   </div>
 </div>
@@ -265,6 +271,39 @@ function setTab(t){
     viewRounds.classList.remove('hidden');
     viewSimple.classList.add('hidden');
   }
+}
+
+/* ---- Helper pro swipe/double-click delete ---- */
+function attachSwipeToDelete(row, getName, onDelete){
+  let startX=null, startY=null;
+  const SWIPE_THRESHOLD = 120;   // méně citlivé
+
+  row.addEventListener('touchstart', e=>{
+    const t=e.changedTouches[0];
+    startX=t.clientX;
+    startY=t.clientY;
+  });
+
+  row.addEventListener('touchend', e=>{
+    if(startX===null) return;
+    const t=e.changedTouches[0];
+    const dx=t.clientX-startX;
+    const dy=t.clientY-startY;
+    startX=startY=null;
+
+    // silný horizontální tah, ne moc šikmý
+    if(Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dy) < 40){
+      const name=getName();
+      const msg=name && name.trim()!=='' ?
+        `Odebrat hráče „${name}“?` :
+        'Odebrat tohoto hráče?';
+      if(confirm(msg)){
+        onDelete();
+      }
+    }
+  });
+
+ 
 }
 
 /* ---- Jednoduché počítadlo ---- */
@@ -316,6 +355,16 @@ function renderSimple(){
     row.appendChild(minus);
     row.appendChild(score);
     row.appendChild(plus);
+
+    // swipe/dblclick delete
+    attachSwipeToDelete(
+      row,
+      ()=>p.name,
+      ()=>{
+        simplePlayers = simplePlayers.filter(sp=>sp.id!==p.id);
+        renderSimple();
+      }
+    );
 
     simpleContainer.appendChild(row);
   });
@@ -369,6 +418,15 @@ let roundId=1;
 let currentRound=1;
 
 document.getElementById('btnAddRound').onclick=()=>addRound();
+document.getElementById('btnResetRounds').onclick=()=>{
+  roundPlayers.forEach(p=>{
+    p.total = 0;
+    p.roundDelta = 0;
+  });
+  currentRound = 1;
+  updateRoundLabel();
+  renderRounds();
+};
 document.getElementById('btnNextRound').onclick=()=>{
   // přičti body z kola do celkových a vynuluj kolo
   roundPlayers.forEach(p=>{
@@ -433,6 +491,16 @@ function renderRounds(){
     row.appendChild(minus);
     row.appendChild(inpRound);
     row.appendChild(plus);
+
+    // swipe/dblclick delete
+    attachSwipeToDelete(
+      row,
+      ()=>p.name,
+      ()=>{
+        roundPlayers = roundPlayers.filter(rp=>rp.id!==p.id);
+        renderRounds();
+      }
+    );
 
     roundContainer.appendChild(row);
   });

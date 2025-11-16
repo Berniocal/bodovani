@@ -4,387 +4,458 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Počítadlo bodů</title>
+
 <style>
   :root{
     --bg:#020617;
     --panel:#0b1220;
-    --panel-soft:#111827;
     --accent:#38bdf8;
     --accent2:#6366f1;
     --text:#e5e7eb;
-    --muted:#9ca3af;
-    --danger:#f97373;
-    --radius:18px;
+    --muted:#94a3b8;
+    --danger:#f43f5e;
+    --radius:16px;
   }
-  *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+
+  *{
+    box-sizing:border-box;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  }
+
   body{
     margin:0;
-    min-height:100vh;
-    background:radial-gradient(circle at top,#1e293b,#020617 55%);
+    padding:12px;
+    background:radial-gradient(circle at top,#1e293b,#020617 60%);
     color:var(--text);
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    padding:16px;
   }
-  .app{
-    width:100%;
-    max-width:700px;
-    margin-top:12px;
+
+  /* Nadpis */
+  h1{
+    margin:0 0 4px;
+    font-size:1.8rem;
+    font-weight:700;
+    text-align:left;
   }
-  .card{
-    background:var(--panel);
-    border-radius:var(--radius);
-    padding:16px 16px 20px;
-    box-shadow:0 18px 40px rgba(15,23,42,.7);
-  }
-  h1{margin:0 0 6px;font-weight:600;}
+
   .sub{
     margin:0 0 14px;
-    font-size:0.9rem;
+    font-size:1rem;
     color:var(--muted);
   }
 
-  /* záložky */
+  /* Tabs */
   .tabs-wrap{
-    background:rgba(15,23,42,.9);
-    border-radius:999px;
-    padding:4px;
+    margin:6px 0 16px;
     display:flex;
-    gap:4px;
-    margin-bottom:14px;
+    gap:6px;
   }
+
   .tab-btn{
     flex:1;
+    text-align:center;
     border:none;
+    padding:10px 14px;
     border-radius:999px;
-    padding:8px 10px;
-    font-size:0.95rem;
-    cursor:pointer;
-    background:transparent;
+    background:#0f172a;
     color:var(--muted);
-    transition:background .15s ease,color .15s ease;
+    font-size:1rem;
   }
+
   .tab-btn.active{
     background:linear-gradient(135deg,var(--accent),var(--accent2));
-    color:#f9fafb;
+    color:white;
   }
 
   .hidden{display:none;}
 
-  /* hráči */
+  /* Hráči */
   .players{
     display:flex;
     flex-direction:column;
-    gap:10px;
-    margin-top:6px;
+    gap:12px;
   }
+
   .player-row{
     display:flex;
     align-items:center;
     gap:8px;
-    background:var(--panel-soft);
+    background:#0f172a;
+    padding:10px;
     border-radius:var(--radius);
-    padding:8px 10px;
   }
+
   .player-name{
     flex:2;
-    min-width:0;
   }
   .player-name input{
     width:100%;
-    background:#020617;
     border-radius:999px;
     border:1px solid #1f2937;
-    padding:6px 10px;
+    background:#020617;
+    padding:8px 12px;
     color:var(--text);
-    font-size:0.95rem;
+    font-size:1rem;
   }
 
+  /* Skóre */
   .pill{
-    min-width:46px;
+    min-width:48px;
     text-align:center;
-    padding:4px 8px;
+    padding:6px 8px;
     border-radius:999px;
     background:#020617;
     border:1px solid #1f2937;
+    font-size:1rem;
     font-variant-numeric:tabular-nums;
-    font-size:0.9rem;
   }
+
   .pill-total{
-    background:#022c22;
+    background:#052e16;
     border-color:#16a34a;
     color:#bbf7d0;
+    min-width:56px;
   }
 
+  /* Tlačítka */
   .btn-mini{
-    min-width:32px;
-    height:32px;
+    width:36px;
+    height:36px;
     border-radius:999px;
     border:none;
-    background:#020617;
-    color:var(--text);
-    font-size:1.2rem;
+    font-size:1.4rem;
     display:flex;
     align-items:center;
     justify-content:center;
     cursor:pointer;
-    transition:transform .08s ease, background .1s ease;
+    color:white;
   }
-  .btn-mini:active{transform:translateY(1px) scale(.96);}
-  .btn-minus{
-  background:#e11d48;   /* světle červená */
-  color:white;
-}
-.btn-minus:active{
-  background:#be123c;   /* tmavší při kliku */
-}
+  .btn-mini:active{transform:scale(.94);}
 
+  .btn-minus{background:#e11d48;}
   .btn-plus{background:#0ea5e9;}
   .btn-plus-round{background:#22c55e;}
 
   .footer-bar{
+    margin-top:16px;
     display:flex;
-    justify-content:space-between;
     gap:10px;
-    margin-top:14px;
     flex-wrap:wrap;
   }
+
   .btn{
+    flex:1;
     border:none;
     border-radius:999px;
-    padding:9px 16px;
-    font-size:0.95rem;
-    font-weight:500;
+    padding:12px;
+    font-size:1rem;
     cursor:pointer;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
+    text-align:center;
   }
   .btn-secondary{
-    background:var(--panel-soft);
+    background:#0f172a;
     color:var(--text);
     border:1px solid #1f2937;
   }
-  .btn-danger{
-    background:var(--danger);
-    color:#111827;
-  }
-  .btn-success{
-    background:linear-gradient(135deg,#22c55e,#16a34a);
-    color:white;
-  }
-  .btn:active{transform:translateY(1px) scale(.99);}
-  .btn-grow{flex:1;}
+  .btn-danger{background:var(--danger);color:white;}
+  .btn-success{background:#16a34a;color:white;}
+  .btn-export{background:#3b82f6;color:white;}
 
-  /* vstup pro body v kole */
+  /* Round input */
   .round-input{
-    width:52px;
+    width:56px;
     text-align:center;
     border-radius:999px;
     border:1px solid #1f2937;
     background:#020617;
+    padding:6px 8px;
     color:var(--text);
-    padding:4px 6px;
+    font-size:1rem;
     font-variant-numeric:tabular-nums;
-    font-size:0.9rem;
   }
-  .round-input:focus{
-    outline:2px solid var(--accent);
-    outline-offset:1px;
-  }
-  /* schovat šipky u number na mobilech */
   input[type=number]::-webkit-inner-spin-button,
   input[type=number]::-webkit-outer-spin-button{
     -webkit-appearance:none;
     margin:0;
   }
-  input[type=number]{-moz-appearance:textfield;}
 </style>
 </head>
+
 <body>
-<div class="app">
-  <section class="card">
-    <h1>Počítadlo bodů</h1>
-    <p class="sub">Vyber typ počítadla, který chceš použít.</p>
 
-    <div class="tabs-wrap">
-      <button id="tabSimple" class="tab-btn active">Jednoduché počítadlo</button>
-      <button id="tabRounds" class="tab-btn">Počítadlo na kola</button>
-    </div>
+<h1>Počítadlo bodů</h1>
+<p class="sub">Vyber typ počítadla, který chceš použít.</p>
 
-    <!-- Jednoduché počítadlo -->
-    <div id="viewSimple">
-      
-      <div id="simplePlayers" class="players"></div>
-      <div class="footer-bar">
-        <button class="btn btn-secondary btn-grow" id="btnAddSimple">+ Přidat hráče</button>
-        <button class="btn btn-danger" id="btnResetSimple">Vynulovat všechny</button>
-      </div>
-    </div>
-
-    <!-- Počítadlo na kola -->
-    <div id="viewRounds" class="hidden">
-     
-      <div id="roundPlayers" class="players"></div>
-      <div class="footer-bar">
-        <button class="btn btn-secondary btn-grow" id="btnAddRound">+ Přidat hráče</button>
-        <button class="btn btn-success btn-grow" id="btnNextRound">Další kolo</button>
-      </div>
-    </div>
-  </section>
+<!-- Tabs -->
+<div class="tabs-wrap">
+  <button id="tabSimple" class="tab-btn active">Jednoduché počítadlo</button>
+  <button id="tabRounds" class="tab-btn">Počítadlo na kola</button>
 </div>
 
+<!-- Jednoduché počítadlo -->
+<div id="viewSimple">
+  <div id="simplePlayers" class="players"></div>
+
+  <div class="footer-bar">
+    <button class="btn btn-secondary" id="btnAddSimple">+ Přidat hráče</button>
+    <button class="btn btn-danger" id="btnResetSimple">Vynulovat všechny</button>
+    <button class="btn btn-export" id="btnExportSimple">Export PDF</button>
+  </div>
+</div>
+
+<!-- Počítadlo na kola -->
+<div id="viewRounds" class="hidden">
+  <div id="roundPlayers" class="players"></div>
+
+  <div class="footer-bar">
+    <button class="btn btn-secondary" id="btnAddRound">+ Přidat hráče</button>
+    <button class="btn btn-success" id="btnNextRound">Další kolo</button>
+    <button class="btn btn-export" id="btnExportRounds">Export PDF</button>
+  </div>
+</div>
+
+<!-- html2pdf -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <script>
-  // přepínání záložek
-  const tabSimple = document.getElementById('tabSimple');
-  const tabRounds = document.getElementById('tabRounds');
-  const viewSimple = document.getElementById('viewSimple');
-  const viewRounds = document.getElementById('viewRounds');
+/* ---- Přepínání záložek ---- */
+const tabSimple=document.getElementById('tabSimple');
+const tabRounds=document.getElementById('tabRounds');
+const viewSimple=document.getElementById('viewSimple');
+const viewRounds=document.getElementById('viewRounds');
 
-  tabSimple.addEventListener('click', () => setTab('simple'));
-  tabRounds.addEventListener('click', () => setTab('rounds'));
+tabSimple.onclick=()=>setTab('simple');
+tabRounds.onclick=()=>setTab('rounds');
 
-  function setTab(which){
-    if(which === 'simple'){
-      tabSimple.classList.add('active');
-      tabRounds.classList.remove('active');
-      viewSimple.classList.remove('hidden');
-      viewRounds.classList.add('hidden');
-    }else{
-      tabRounds.classList.add('active');
-      tabSimple.classList.remove('active');
-      viewRounds.classList.remove('hidden');
-      viewSimple.classList.add('hidden');
-    }
+function setTab(t){
+  if(t==='simple'){
+    tabSimple.classList.add('active');
+    tabRounds.classList.remove('active');
+    viewSimple.classList.remove('hidden');
+    viewRounds.classList.add('hidden');
+  }else{
+    tabRounds.classList.add('active');
+    tabSimple.classList.remove('active');
+    viewRounds.classList.remove('hidden');
+    viewSimple.classList.add('hidden');
   }
+}
 
-  // ---------- Jednoduché počítadlo ----------
-  const simpleContainer = document.getElementById('simplePlayers');
-  let simplePlayers = [];
-  let simpleIdCounter = 1;
+/* ---- Jednoduché počítadlo ---- */
+const simpleContainer=document.getElementById('simplePlayers');
+let simplePlayers=[]; let simpleId=1;
 
-  document.getElementById('btnAddSimple').onclick = () => addSimplePlayer();
-  document.getElementById('btnResetSimple').onclick = () => {
-    simplePlayers.forEach(p => p.score = 0);
-    renderSimple();
+document.getElementById('btnAddSimple').onclick=()=>addSimple();
+document.getElementById('btnResetSimple').onclick=()=>{
+  simplePlayers.forEach(p=>p.score=0);
+  renderSimple();
+};
+
+document.getElementById('btnExportSimple').onclick=()=>exportSimplePDF();
+
+function addSimple(){
+  simplePlayers.push({id:simpleId++,name:'',score:0});
+  renderSimple();
+}
+
+function renderSimple(){
+  simpleContainer.innerHTML='';
+  simplePlayers.forEach(p=>{
+    const row=document.createElement('div');
+    row.className='player-row';
+
+    const name=document.createElement('div');
+    name.className='player-name';
+    const inp=document.createElement('input');
+    inp.placeholder='Jméno hráče';
+    inp.value=p.name;
+    inp.oninput=()=>p.name=inp.value;
+    name.appendChild(inp);
+
+    const minus=document.createElement('button');
+    minus.className='btn-mini btn-minus';
+    minus.textContent='−';
+    minus.onclick=()=>{p.score--;renderSimple();};
+
+    const score=document.createElement('div');
+    score.className='pill';
+    score.textContent=p.score;
+
+    const plus=document.createElement('button');
+    plus.className='btn-mini btn-plus';
+    plus.textContent='+';
+    plus.onclick=()=>{p.score++;renderSimple();};
+
+    row.appendChild(name);
+    row.appendChild(minus);
+    row.appendChild(score);
+    row.appendChild(plus);
+
+    simpleContainer.appendChild(row);
+  });
+}
+
+function exportSimplePDF(){
+  // poskládáme jednoduché HTML s vlastními (černými) styly
+  let html = `
+  <div style="font-family: Arial, Helvetica, sans-serif; color:#000;">
+    <h2 style="margin:0 0 8px; font-size:18pt;">Výsledky – Jednoduché počítadlo</h2>
+    <table style="border-collapse:collapse; width:100%; font-size:12pt;">
+      <thead>
+        <tr>
+          <th style="border:1px solid #000; padding:6px 8px; text-align:left; background:#f3f4f6;">Jméno</th>
+          <th style="border:1px solid #000; padding:6px 8px; text-align:right; background:#f3f4f6;">Body</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  simplePlayers.forEach((p, i) => {
+    const name = (p.name && p.name.trim() !== '') ? p.name : ('Hráč ' + (i+1));
+    html += `
+      <tr>
+        <td style="border:1px solid #000; padding:5px 8px; text-align:left;">${name}</td>
+        <td style="border:1px solid #000; padding:5px 8px; text-align:right;">${p.score}</td>
+      </tr>
+    `;
+  });
+
+  html += `
+      </tbody>
+    </table>
+  </div>
+  `;
+
+  const element = document.createElement('div');
+  element.innerHTML = html;
+
+  const opt = {
+    margin:       10,
+    filename:     'vysledky-jednoduche-pocitadlo.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
-  function addSimplePlayer(){
-    const p = {id:simpleIdCounter++, name:'', score:0};
-    simplePlayers.push(p);
-    renderSimple();
-  }
+  html2pdf().set(opt).from(element).save();
+}
 
-  function renderSimple(){
-    simpleContainer.innerHTML = '';
-    simplePlayers.forEach(p => {
-      const row = document.createElement('div');
-      row.className = 'player-row';
 
-      const nameWrap = document.createElement('div');
-      nameWrap.className = 'player-name';
-      const input = document.createElement('input');
-      input.placeholder = 'Jméno hráče';
-      input.value = p.name;
-      input.oninput = () => { p.name = input.value; };
-      nameWrap.appendChild(input);
+/* ---- Počítadlo na kola ---- */
+const roundContainer=document.getElementById('roundPlayers');
+let roundPlayers=[]; let roundId=1;
 
-      const minusBtn = document.createElement('button');
-      minusBtn.className = 'btn-mini btn-minus';
-      minusBtn.textContent = '−';
-      minusBtn.onclick = () => { p.score--; renderSimple(); };
+document.getElementById('btnAddRound').onclick=()=>addRound();
+document.getElementById('btnNextRound').onclick=()=>{
+  roundPlayers.forEach(p=>p.total+=p.roundDelta);
+  renderRounds();
+};
 
-      const scoreSpan = document.createElement('div');
-      scoreSpan.className = 'pill';
-      scoreSpan.textContent = p.score;
+document.getElementById('btnExportRounds').onclick=()=>exportRoundsPDF();
 
-      const plusBtn = document.createElement('button');
-      plusBtn.className = 'btn-mini btn-plus';
-      plusBtn.textContent = '+';
-      plusBtn.onclick = () => { p.score++; renderSimple(); };
+function addRound(){
+  roundPlayers.push({id:roundId++,name:'',total:0,roundDelta:0});
+  renderRounds();
+}
 
-      row.appendChild(nameWrap);
-      row.appendChild(minusBtn);
-      row.appendChild(scoreSpan);
-      row.appendChild(plusBtn);
+function renderRounds(){
+  roundContainer.innerHTML='';
+  roundPlayers.forEach(p=>{
+    const row=document.createElement('div');
+    row.className='player-row';
 
-      simpleContainer.appendChild(row);
-    });
-  }
+    const name=document.createElement('div');
+    name.className='player-name';
+    const inp=document.createElement('input');
+    inp.placeholder='Jméno hráče';
+    inp.value=p.name;
+    inp.oninput=()=>p.name=inp.value;
+    name.appendChild(inp);
 
-  // ---------- Počítadlo na kola ----------
-  const roundContainer = document.getElementById('roundPlayers');
-  let roundPlayers = [];
-  let roundIdCounter = 1;
+    const total=document.createElement('div');
+    total.className='pill pill-total';
+    total.textContent=p.total;
 
-  document.getElementById('btnAddRound').onclick = () => addRoundPlayer();
-  document.getElementById('btnNextRound').onclick = () => {
-    roundPlayers.forEach(p => {
-      p.total += p.roundDelta;
-    });
-    renderRounds();
+    const minus=document.createElement('button');
+    minus.className='btn-mini btn-minus';
+    minus.textContent='−';
+    minus.onclick=()=>{p.roundDelta--;renderRounds();};
+
+    const inpRound=document.createElement('input');
+    inpRound.className='round-input';
+    inpRound.type='number';
+    inpRound.inputMode='numeric';
+    inpRound.value=p.roundDelta;
+    inpRound.oninput=()=>{
+      p.roundDelta=isNaN(parseInt(inpRound.value))?0:parseInt(inpRound.value);
+    };
+
+    const plus=document.createElement('button');
+    plus.className='btn-mini btn-plus-round';
+    plus.textContent='+';
+    plus.onclick=()=>{p.roundDelta++;renderRounds();};
+
+    row.appendChild(name);
+    row.appendChild(total);
+    row.appendChild(minus);
+    row.appendChild(inpRound);
+    row.appendChild(plus);
+
+    roundContainer.appendChild(row);
+  });
+}
+
+function exportRoundsPDF(){
+  let html = `
+  <div style="font-family: Arial, Helvetica, sans-serif; color:#000;">
+    <h2 style="margin:0 0 8px; font-size:18pt;">Výsledky – Počítadlo na kola</h2>
+    <table style="border-collapse:collapse; width:100%; font-size:12pt;">
+      <thead>
+        <tr>
+          <th style="border:1px solid #000; padding:6px 8px; text-align:left; background:#f3f4f6;">Jméno</th>
+          <th style="border:1px solid #000; padding:6px 8px; text-align:right; background:#f3f4f6;">Celkem bodů</th>
+          <th style="border:1px solid #000; padding:6px 8px; text-align:right; background:#f3f4f6;">Body v kole</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  roundPlayers.forEach((p, i) => {
+    const name = (p.name && p.name.trim() !== '') ? p.name : ('Hráč ' + (i+1));
+    html += `
+      <tr>
+        <td style="border:1px solid #000; padding:5px 8px; text-align:left;">${name}</td>
+        <td style="border:1px solid #000; padding:5px 8px; text-align:right;">${p.total}</td>
+        <td style="border:1px solid #000; padding:5px 8px; text-align:right;">${p.roundDelta}</td>
+      </tr>
+    `;
+  });
+
+  html += `
+      </tbody>
+    </table>
+  </div>
+  `;
+
+  const element = document.createElement('div');
+  element.innerHTML = html;
+
+  const opt = {
+    margin:       10,
+    filename:     'vysledky-pocitadlo-kola.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
-  function addRoundPlayer(){
-    const p = {id:roundIdCounter++, name:'', total:0, roundDelta:0};
-    roundPlayers.push(p);
-    renderRounds();
-  }
+  html2pdf().set(opt).from(element).save();
+}
 
-  function renderRounds(){
-    roundContainer.innerHTML = '';
-    roundPlayers.forEach(p => {
-      const row = document.createElement('div');
-      row.className = 'player-row';
 
-      const nameWrap = document.createElement('div');
-      nameWrap.className = 'player-name';
-      const input = document.createElement('input');
-      input.placeholder = 'Jméno hráče';
-      input.value = p.name;
-      input.oninput = () => { p.name = input.value; };
-      nameWrap.appendChild(input);
-
-      const totalSpan = document.createElement('div');
-      totalSpan.className = 'pill pill-total';
-      totalSpan.textContent = p.total;
-
-      const minusBtn = document.createElement('button');
-      minusBtn.className = 'btn-mini btn-minus';
-      minusBtn.textContent = '−';
-      minusBtn.onclick = () => { p.roundDelta--; renderRounds(); };
-
-      const deltaInput = document.createElement('input');
-      deltaInput.type = 'number';
-      deltaInput.inputMode = 'numeric';
-      deltaInput.className = 'round-input';
-      deltaInput.value = p.roundDelta;
-      deltaInput.oninput = () => {
-        const val = parseInt(deltaInput.value,10);
-        p.roundDelta = isNaN(val) ? 0 : val;
-      };
-
-      const plusBtn = document.createElement('button');
-      plusBtn.className = 'btn-mini btn-plus-round';
-      plusBtn.textContent = '+';
-      plusBtn.onclick = () => { p.roundDelta++; renderRounds(); };
-
-      row.appendChild(nameWrap);   // jméno
-      row.appendChild(totalSpan);  // CELKEM mezi jménem a mínusem
-      row.appendChild(minusBtn);   // -
-      row.appendChild(deltaInput); // číslo mezi - a +
-      row.appendChild(plusBtn);    // +
-
-      roundContainer.appendChild(row);
-    });
-  }
-
-  // start: jedna řádka v obou režimech, aktivní jednoduché počítadlo
-  addSimplePlayer();
-  addRoundPlayer();
-  setTab('simple');
+/* start */
+addSimple();
+addRound();
+setTab('simple');
 </script>
+
 </body>
 </html>

@@ -10,7 +10,7 @@
     --panel:#0b1220;
     --panel-soft:#111827;
     --accent:#38bdf8;
-    --accent2:#4ade80;
+    --accent2:#6366f1;
     --text:#e5e7eb;
     --muted:#9ca3af;
     --danger:#f97373;
@@ -32,88 +32,52 @@
     max-width:700px;
     margin-top:12px;
   }
-  h1,h2,h3{margin:0 0 12px;font-weight:600}
   .card{
     background:var(--panel);
     border-radius:var(--radius);
     padding:16px 16px 20px;
     box-shadow:0 18px 40px rgba(15,23,42,.7);
   }
+  h1{margin:0 0 6px;font-weight:600;}
   .sub{
-    color:var(--muted);
+    margin:0 0 14px;
     font-size:0.9rem;
-    margin-bottom:16px;
+    color:var(--muted);
   }
-  .menu-buttons{
+
+  /* záložky */
+  .tabs-wrap{
+    background:rgba(15,23,42,.9);
+    border-radius:999px;
+    padding:4px;
     display:flex;
-    flex-direction:column;
-    gap:12px;
-    margin-top:8px;
+    gap:4px;
+    margin-bottom:14px;
   }
-  .btn{
+  .tab-btn{
+    flex:1;
     border:none;
     border-radius:999px;
-    padding:10px 18px;
-    font-size:1rem;
-    font-weight:500;
+    padding:8px 10px;
+    font-size:0.95rem;
     cursor:pointer;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    transition:transform .08s ease, box-shadow .08s ease, background .15s ease;
-  }
-  .btn-main{
-    background:linear-gradient(135deg,#38bdf8,#6366f1);
-    color:white;
-    box-shadow:0 10px 20px rgba(37,99,235,.6);
-  }
-  .btn-secondary{
-    background:var(--panel-soft);
-    color:var(--text);
-    border:1px solid #1f2937;
-  }
-  .btn-ghost{
     background:transparent;
     color:var(--muted);
-    border:1px solid #1f2937;
+    transition:background .15s ease,color .15s ease;
   }
-  .btn-success{
-    background:linear-gradient(135deg,#22c55e,#16a34a);
-    color:white;
-  }
-  .btn-danger{
-    background:var(--danger);
-    color:#111827;
-  }
-  .btn:active{
-    transform:translateY(1px) scale(.99);
-    box-shadow:none;
+  .tab-btn.active{
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:#f9fafb;
   }
 
   .hidden{display:none;}
-
-  .top-bar{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:12px;
-  }
-  .top-title{
-    font-size:1.1rem;
-    font-weight:600;
-  }
-  .top-right{
-    display:flex;
-    gap:8px;
-  }
 
   /* hráči */
   .players{
     display:flex;
     flex-direction:column;
     gap:10px;
-    margin-top:10px;
+    margin-top:6px;
   }
   .player-row{
     display:flex;
@@ -136,8 +100,9 @@
     color:var(--text);
     font-size:0.95rem;
   }
+
   .pill{
-    min-width:44px;
+    min-width:46px;
     text-align:center;
     padding:4px 8px;
     border-radius:999px;
@@ -151,10 +116,7 @@
     border-color:#16a34a;
     color:#bbf7d0;
   }
-  .pill-round{
-    background:#020617;
-    border-color:#1f2937;
-  }
+
   .btn-mini{
     min-width:32px;
     height:32px;
@@ -170,161 +132,132 @@
     transition:transform .08s ease, background .1s ease;
   }
   .btn-mini:active{transform:translateY(1px) scale(.96);}
-  .btn-minus{background:#0f172a;}
+  .btn-minus{
+  background:#e11d48;   /* světle červená */
+  color:white;
+}
+.btn-minus:active{
+  background:#be123c;   /* tmavší při kliku */
+}
+
   .btn-plus{background:#0ea5e9;}
   .btn-plus-round{background:#22c55e;}
+
   .footer-bar{
     display:flex;
     justify-content:space-between;
     gap:10px;
     margin-top:14px;
+    flex-wrap:wrap;
   }
-  .btn-add{
-    flex:1;
-  }
-  .btn-next-round{
-    flex:1;
-  }
-
-  /* numerická klávesnice */
-  .overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(15,23,42,.8);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:50;
-  }
-  .keypad{
-    width:100%;
-    max-width:260px;
-    background:var(--panel);
-    border-radius:20px;
-    padding:14px;
-    box-shadow:0 22px 45px rgba(15,23,42,.9);
-  }
-  .keypad-display{
-    background:#020617;
-    border-radius:12px;
-    padding:8px 10px;
-    margin-bottom:10px;
-    text-align:right;
-    font-size:1.4rem;
-    font-variant-numeric:tabular-nums;
-  }
-  .keypad-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:6px;
-    margin-bottom:8px;
-  }
-  .key-button{
+  .btn{
     border:none;
     border-radius:999px;
-    padding:10px 0;
-    font-size:1.1rem;
-    background:#0f172a;
-    color:var(--text);
+    padding:9px 16px;
+    font-size:0.95rem;
+    font-weight:500;
     cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
   }
-  .key-button:active{transform:translateY(1px) scale(.97);}
-  .key-small{font-size:0.85rem;}
+  .btn-secondary{
+    background:var(--panel-soft);
+    color:var(--text);
+    border:1px solid #1f2937;
+  }
+  .btn-danger{
+    background:var(--danger);
+    color:#111827;
+  }
+  .btn-success{
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:white;
+  }
+  .btn:active{transform:translateY(1px) scale(.99);}
+  .btn-grow{flex:1;}
+
+  /* vstup pro body v kole */
+  .round-input{
+    width:52px;
+    text-align:center;
+    border-radius:999px;
+    border:1px solid #1f2937;
+    background:#020617;
+    color:var(--text);
+    padding:4px 6px;
+    font-variant-numeric:tabular-nums;
+    font-size:0.9rem;
+  }
+  .round-input:focus{
+    outline:2px solid var(--accent);
+    outline-offset:1px;
+  }
+  /* schovat šipky u number na mobilech */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button{
+    -webkit-appearance:none;
+    margin:0;
+  }
+  input[type=number]{-moz-appearance:textfield;}
 </style>
 </head>
 <body>
 <div class="app">
-
-  <!-- MENU -->
-  <section id="view-menu" class="card">
+  <section class="card">
     <h1>Počítadlo bodů</h1>
     <p class="sub">Vyber typ počítadla, který chceš použít.</p>
-    <div class="menu-buttons">
-      <button class="btn btn-main" id="btnToSimple">Jednoduché počítadlo</button>
-      <button class="btn btn-secondary" id="btnToRounds">Počítadlo na kola</button>
+
+    <div class="tabs-wrap">
+      <button id="tabSimple" class="tab-btn active">Jednoduché počítadlo</button>
+      <button id="tabRounds" class="tab-btn">Počítadlo na kola</button>
+    </div>
+
+    <!-- Jednoduché počítadlo -->
+    <div id="viewSimple">
+      
+      <div id="simplePlayers" class="players"></div>
+      <div class="footer-bar">
+        <button class="btn btn-secondary btn-grow" id="btnAddSimple">+ Přidat hráče</button>
+        <button class="btn btn-danger" id="btnResetSimple">Vynulovat všechny</button>
+      </div>
+    </div>
+
+    <!-- Počítadlo na kola -->
+    <div id="viewRounds" class="hidden">
+     
+      <div id="roundPlayers" class="players"></div>
+      <div class="footer-bar">
+        <button class="btn btn-secondary btn-grow" id="btnAddRound">+ Přidat hráče</button>
+        <button class="btn btn-success btn-grow" id="btnNextRound">Další kolo</button>
+      </div>
     </div>
   </section>
-
-  <!-- JEDNODUCHÉ POČÍTADLO -->
-  <section id="view-simple" class="card hidden">
-    <div class="top-bar">
-      <div class="top-title">Jednoduché počítadlo</div>
-      <div class="top-right">
-        <button class="btn btn-ghost" id="btnBackFromSimple">Zpět</button>
-      </div>
-    </div>
-    <p class="sub">Každý hráč má jedno číslo bodů. Plus/mínus hodnotu mění přímo.</p>
-    <div id="simplePlayers" class="players"></div>
-    <div class="footer-bar">
-      <button class="btn btn-secondary btn-add" id="btnAddSimple">+ Přidat hráče</button>
-      <button class="btn btn-danger" id="btnResetSimple">Vynulovat</button>
-    </div>
-  </section>
-
-  <!-- POČÍTADLO NA KOLA -->
-  <section id="view-rounds" class="card hidden">
-    <div class="top-bar">
-      <div class="top-title">Počítadlo na kola</div>
-      <div class="top-right">
-        <button class="btn btn-ghost" id="btnBackFromRounds">Zpět</button>
-      </div>
-    </div>
-    <p class="sub">
-      Každý hráč má <strong>celkové body</strong> a <strong>body v aktuálním kole</strong>.  
-      Tlačítko <em>Další kolo</em> přičte body z tohoto kola k celkovým bodům.
-    </p>
-    <div id="roundPlayers" class="players"></div>
-    <div class="footer-bar">
-      <button class="btn btn-secondary btn-add" id="btnAddRound">+ Přidat hráče</button>
-      <button class="btn btn-success btn-next-round" id="btnNextRound">Další kolo</button>
-    </div>
-  </section>
-
-  <!-- NUMERICKÁ KLÁVESNICE -->
-  <div id="keypadOverlay" class="overlay hidden">
-    <div class="keypad">
-      <div id="keypadDisplay" class="keypad-display">0</div>
-      <div class="keypad-grid">
-        <button class="key-button">7</button>
-        <button class="key-button">8</button>
-        <button class="key-button">9</button>
-        <button class="key-button">4</button>
-        <button class="key-button">5</button>
-        <button class="key-button">6</button>
-        <button class="key-button">1</button>
-        <button class="key-button">2</button>
-        <button class="key-button">3</button>
-        <button class="key-button key-small" data-action="minus">±</button>
-        <button class="key-button">0</button>
-        <button class="key-button key-small" data-action="back">⌫</button>
-      </div>
-      <div style="display:flex;gap:8px;margin-top:6px;">
-        <button class="btn btn-ghost" id="keypadCancel" style="flex:1;">Zrušit</button>
-        <button class="btn btn-main" id="keypadOk" style="flex:1;">OK</button>
-      </div>
-    </div>
-  </div>
-
 </div>
 
 <script>
-  // Přepínání pohledů
-  const viewMenu = document.getElementById('view-menu');
-  const viewSimple = document.getElementById('view-simple');
-  const viewRounds = document.getElementById('view-rounds');
+  // přepínání záložek
+  const tabSimple = document.getElementById('tabSimple');
+  const tabRounds = document.getElementById('tabRounds');
+  const viewSimple = document.getElementById('viewSimple');
+  const viewRounds = document.getElementById('viewRounds');
 
-  document.getElementById('btnToSimple').onclick = () => showView('simple');
-  document.getElementById('btnToRounds').onclick = () => showView('rounds');
-  document.getElementById('btnBackFromSimple').onclick = () => showView('menu');
-  document.getElementById('btnBackFromRounds').onclick = () => showView('menu');
+  tabSimple.addEventListener('click', () => setTab('simple'));
+  tabRounds.addEventListener('click', () => setTab('rounds'));
 
-  function showView(which){
-    viewMenu.classList.add('hidden');
-    viewSimple.classList.add('hidden');
-    viewRounds.classList.add('hidden');
-    if(which === 'simple') viewSimple.classList.remove('hidden');
-    else if(which === 'rounds') viewRounds.classList.remove('hidden');
-    else viewMenu.classList.remove('hidden');
+  function setTab(which){
+    if(which === 'simple'){
+      tabSimple.classList.add('active');
+      tabRounds.classList.remove('active');
+      viewSimple.classList.remove('hidden');
+      viewRounds.classList.add('hidden');
+    }else{
+      tabRounds.classList.add('active');
+      tabSimple.classList.remove('active');
+      viewRounds.classList.remove('hidden');
+      viewSimple.classList.add('hidden');
+    }
   }
 
   // ---------- Jednoduché počítadlo ----------
@@ -389,14 +322,13 @@
   document.getElementById('btnAddRound').onclick = () => addRoundPlayer();
   document.getElementById('btnNextRound').onclick = () => {
     roundPlayers.forEach(p => {
-      p.total += p.round;
-      p.round = 0;
+      p.total += p.roundDelta;
     });
     renderRounds();
   };
 
   function addRoundPlayer(){
-    const p = {id:roundIdCounter++, name:'', total:0, round:0};
+    const p = {id:roundIdCounter++, name:'', total:0, roundDelta:0};
     roundPlayers.push(p);
     renderRounds();
   }
@@ -422,99 +354,37 @@
       const minusBtn = document.createElement('button');
       minusBtn.className = 'btn-mini btn-minus';
       minusBtn.textContent = '−';
-      minusBtn.onclick = () => { p.round--; renderRounds(); };
+      minusBtn.onclick = () => { p.roundDelta--; renderRounds(); };
 
-      const roundSpan = document.createElement('div');
-      roundSpan.className = 'pill pill-round';
-      roundSpan.textContent = p.round;
-      roundSpan.style.cursor = 'pointer';
-      roundSpan.onclick = () => openKeypadFor(p.id);
+      const deltaInput = document.createElement('input');
+      deltaInput.type = 'number';
+      deltaInput.inputMode = 'numeric';
+      deltaInput.className = 'round-input';
+      deltaInput.value = p.roundDelta;
+      deltaInput.oninput = () => {
+        const val = parseInt(deltaInput.value,10);
+        p.roundDelta = isNaN(val) ? 0 : val;
+      };
 
       const plusBtn = document.createElement('button');
       plusBtn.className = 'btn-mini btn-plus-round';
       plusBtn.textContent = '+';
-      plusBtn.onclick = () => { p.round++; renderRounds(); };
+      plusBtn.onclick = () => { p.roundDelta++; renderRounds(); };
 
-      row.appendChild(nameWrap);
-      row.appendChild(totalSpan);
-      row.appendChild(minusBtn);
-      row.appendChild(roundSpan);
-      row.appendChild(plusBtn);
+      row.appendChild(nameWrap);   // jméno
+      row.appendChild(totalSpan);  // CELKEM mezi jménem a mínusem
+      row.appendChild(minusBtn);   // -
+      row.appendChild(deltaInput); // číslo mezi - a +
+      row.appendChild(plusBtn);    // +
 
       roundContainer.appendChild(row);
     });
   }
 
-  // ---------- Numerická klávesnice pro úpravu bodů v kole ----------
-  const overlay = document.getElementById('keypadOverlay');
-  const display = document.getElementById('keypadDisplay');
-  const keys = overlay.querySelectorAll('.key-button');
-  const btnOk = document.getElementById('keypadOk');
-  const btnCancel = document.getElementById('keypadCancel');
-  let currentPlayerId = null;
-  let currentValue = '0';
-
-  function openKeypadFor(playerId){
-    currentPlayerId = playerId;
-    const p = roundPlayers.find(x => x.id === playerId);
-    currentValue = String(p.round);
-    display.textContent = currentValue;
-    overlay.classList.remove('hidden');
-  }
-
-  function closeKeypad(apply){
-    if(apply && currentPlayerId != null){
-      const p = roundPlayers.find(x => x.id === currentPlayerId);
-      if(p){
-        const n = parseInt(currentValue,10);
-        if(!isNaN(n)) p.round = n;
-      }
-      renderRounds();
-    }
-    overlay.classList.add('hidden');
-    currentPlayerId = null;
-  }
-
-  keys.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const act = btn.dataset.action;
-      if(act === 'minus'){
-        if(currentValue.startsWith('-')){
-          currentValue = currentValue.slice(1);
-        }else{
-          currentValue = currentValue === '0' ? '-0' : '-' + currentValue;
-        }
-      }else if(act === 'back'){
-        if(currentValue.length <= 1 || (currentValue.length === 2 && currentValue[0] === '-')){
-          currentValue = '0';
-        }else{
-          currentValue = currentValue.slice(0,-1);
-        }
-      }else{
-        const digit = btn.textContent.trim();
-        if(currentValue === '0'){
-          currentValue = digit;
-        }else if(currentValue === '-0'){
-          currentValue = '-' + digit;
-        }else{
-          currentValue += digit;
-        }
-      }
-      display.textContent = currentValue;
-    });
-  });
-
-  btnOk.onclick = () => closeKeypad(true);
-  btnCancel.onclick = () => closeKeypad(false);
-
-  // Zavřít overlay kliknutím mimo klávesnici
-  overlay.addEventListener('click', e => {
-    if(e.target === overlay) closeKeypad(false);
-  });
-
-  // Start: ukážeme menu a po jednom hráči v každém módu
+  // start: jedna řádka v obou režimech, aktivní jednoduché počítadlo
   addSimplePlayer();
   addRoundPlayer();
+  setTab('simple');
 </script>
 </body>
 </html>

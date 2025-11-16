@@ -59,6 +59,7 @@
     background:#0f172a;
     color:var(--muted);
     font-size:1rem;
+    cursor:pointer;
   }
 
   .tab-btn.active{
@@ -177,6 +178,25 @@
     -webkit-appearance:none;
     margin:0;
   }
+
+  /* lišta s číslem kola */
+  .round-info{
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    margin-bottom:10px;
+    gap:6px;
+    font-size:0.95rem;
+    color:var(--muted);
+  }
+  .round-badge{
+    padding:4px 10px;
+    border-radius:999px;
+    background:#0f172a;
+    border:1px solid #1f2937;
+    font-weight:600;
+    color:#e5e7eb;
+  }
 </style>
 </head>
 
@@ -204,6 +224,13 @@
 
 <!-- Počítadlo na kola -->
 <div id="viewRounds" class="hidden">
+
+  <!-- 🔵 info o kole -->
+  <div class="round-info">
+    <span>Aktuální kolo:</span>
+    <span class="round-badge" id="roundNumber">1</span>
+  </div>
+
   <div id="roundPlayers" class="players"></div>
 
   <div class="footer-bar">
@@ -294,8 +321,8 @@ function renderSimple(){
   });
 }
 
+/* ---- Export PDF (jednoduché) ---- */
 function exportSimplePDF(){
-  // poskládáme jednoduché HTML s vlastními (černými) styly
   let html = `
   <div style="font-family: Arial, Helvetica, sans-serif; color:#000;">
     <h2 style="margin:0 0 8px; font-size:18pt;">Výsledky – Jednoduché počítadlo</h2>
@@ -308,49 +335,56 @@ function exportSimplePDF(){
       </thead>
       <tbody>
   `;
-
-  simplePlayers.forEach((p, i) => {
-    const name = (p.name && p.name.trim() !== '') ? p.name : ('Hráč ' + (i+1));
-    html += `
+  simplePlayers.forEach((p,i)=>{
+    const name=(p.name && p.name.trim()!=='')?p.name:('Hráč '+(i+1));
+    html+=`
       <tr>
         <td style="border:1px solid #000; padding:5px 8px; text-align:left;">${name}</td>
         <td style="border:1px solid #000; padding:5px 8px; text-align:right;">${p.score}</td>
       </tr>
     `;
   });
-
-  html += `
+  html+=`
       </tbody>
     </table>
-  </div>
-  `;
+  </div>`;
 
-  const element = document.createElement('div');
-  element.innerHTML = html;
-
-  const opt = {
-    margin:       10,
-    filename:     'vysledky-jednoduche-pocitadlo.pdf',
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true },
-    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  const element=document.createElement('div');
+  element.innerHTML=html;
+  const opt={
+    margin:10,
+    filename:'vysledky-jednoduche-pocitadlo.pdf',
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2,useCORS:true},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
   };
-
   html2pdf().set(opt).from(element).save();
 }
 
-
 /* ---- Počítadlo na kola ---- */
 const roundContainer=document.getElementById('roundPlayers');
-let roundPlayers=[]; let roundId=1;
+const roundNumberEl=document.getElementById('roundNumber');
+let roundPlayers=[]; 
+let roundId=1;
+let currentRound=1;
 
 document.getElementById('btnAddRound').onclick=()=>addRound();
 document.getElementById('btnNextRound').onclick=()=>{
-  roundPlayers.forEach(p=>p.total+=p.roundDelta);
+  // přičti body z kola do celkových a vynuluj kolo
+  roundPlayers.forEach(p=>{
+    p.total += p.roundDelta;
+    p.roundDelta = 0;
+  });
+  currentRound++;
+  updateRoundLabel();
   renderRounds();
 };
 
 document.getElementById('btnExportRounds').onclick=()=>exportRoundsPDF();
+
+function updateRoundLabel(){
+  roundNumberEl.textContent = currentRound;
+}
 
 function addRound(){
   roundPlayers.push({id:roundId++,name:'',total:0,roundDelta:0});
@@ -404,10 +438,11 @@ function renderRounds(){
   });
 }
 
+/* ---- Export PDF (kola) ---- */
 function exportRoundsPDF(){
   let html = `
   <div style="font-family: Arial, Helvetica, sans-serif; color:#000;">
-    <h2 style="margin:0 0 8px; font-size:18pt;">Výsledky – Počítadlo na kola</h2>
+    <h2 style="margin:0 0 8px; font-size:18pt;">Výsledky – Počítadlo na kola (kolo ${currentRound})</h2>
     <table style="border-collapse:collapse; width:100%; font-size:12pt;">
       <thead>
         <tr>
@@ -418,10 +453,9 @@ function exportRoundsPDF(){
       </thead>
       <tbody>
   `;
-
-  roundPlayers.forEach((p, i) => {
-    const name = (p.name && p.name.trim() !== '') ? p.name : ('Hráč ' + (i+1));
-    html += `
+  roundPlayers.forEach((p,i)=>{
+    const name=(p.name && p.name.trim()!=='')?p.name:('Hráč '+(i+1));
+    html+=`
       <tr>
         <td style="border:1px solid #000; padding:5px 8px; text-align:left;">${name}</td>
         <td style="border:1px solid #000; padding:5px 8px; text-align:right;">${p.total}</td>
@@ -429,31 +463,27 @@ function exportRoundsPDF(){
       </tr>
     `;
   });
-
-  html += `
+  html+=`
       </tbody>
     </table>
-  </div>
-  `;
+  </div>`;
 
-  const element = document.createElement('div');
-  element.innerHTML = html;
-
-  const opt = {
-    margin:       10,
-    filename:     'vysledky-pocitadlo-kola.pdf',
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true },
-    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  const element=document.createElement('div');
+  element.innerHTML=html;
+  const opt={
+    margin:10,
+    filename:'vysledky-pocitadlo-kola.pdf',
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2,useCORS:true},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
   };
-
   html2pdf().set(opt).from(element).save();
 }
-
 
 /* start */
 addSimple();
 addRound();
+updateRoundLabel();
 setTab('simple');
 </script>
 

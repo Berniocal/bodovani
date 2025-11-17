@@ -198,11 +198,35 @@
     font-weight:600;
     color:#e5e7eb;
   }
+/* obal stránky */
+.app{
+  width:100%;
+  max-width:900px;      /* jak moc široké to smí být na velkých monitorech */
+  margin:0 auto;
+}
+
+/* úpravy jen pro větší obrazovky (PC) */
+@media (min-width: 900px){
+  body{
+    display:flex;
+    justify-content:center;
+  }
+
+  /* tlačítka užší, ne přes celou šířku */
+  .footer-bar{
+    justify-content:flex-start;
+  }
+  .footer-bar .btn{
+    flex:0 0 auto;      /* už nevyplňuj celou řádku */
+    min-width:220px;    /* přiměřená minimální šířka */
+  }
+}
+
 </style>
 </head>
 
 <body>
-
+  <div class="app">
 <h1>Počítadlo bodů</h1>
 <p class="sub">Vyber typ počítadla, který chceš použít.</p>
 
@@ -554,6 +578,6 @@ addRound();
 updateRoundLabel();
 setTab('simple');
 </script>
-
+  </div>
 </body>
 </html>

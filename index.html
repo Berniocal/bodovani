@@ -2,472 +2,174 @@
 <html lang="cs">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Počítadlo bodů</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#15324a" id="themeColor">
+<title>Počítadlo kol</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/icons/icon-64.png">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 <style>
-  :root{
-    --bg:#020617;
-    --panel:#0b1220;
-    --accent:#38bdf8;
-    --accent2:#6366f1;
-    --text:#e5e7eb;
-    --muted:#94a3b8;
-    --danger:#f43f5e;
-    --radius:16px;
-  }
-
-  *{
-    box-sizing:border-box;
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  }
-
-  body{
-    margin:0;
-    padding:12px;
-    background:radial-gradient(circle at top,#1e293b,#020617 60%);
-    color:var(--text);
-  }
-
-  h1{
-    margin:0 0 4px;
-    font-size:1.8rem;
-    font-weight:700;
-    text-align:left;
-  }
-
-  .sub{
-    margin:0 0 14px;
-    font-size:1rem;
-    color:var(--muted);
-  }
-
-  .tabs-wrap{
-    margin:6px 0 16px;
-    display:flex;
-    gap:6px;
-  }
-
-  .tab-btn{
-    flex:1;
-    text-align:center;
-    border:none;
-    padding:10px 14px;
-    border-radius:999px;
-    background:#0f172a;
-    color:var(--muted);
-    font-size:1rem;
-    cursor:pointer;
-  }
-
-  .tab-btn.active{
-    background:linear-gradient(135deg,var(--accent),var(--accent2));
-    color:white;
-  }
-
-  .hidden{display:none;}
-
-  .players{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-  }
-
-  .player-row{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    background:#0f172a;
-    padding:0px;
-    border-radius:var(--radius);
-  }
-
-  .player-name{
-    flex:2;
-  }
-  .player-name input{
-    width:100%;
-    border-radius:999px;
-    border:1px solid #1f2937;
-    background:#020617;
-    padding:8px 12px;
-    color:var(--text);
-    font-size:1rem;
-  }
-
-  .pill{
-    min-width:48px;
-    text-align:center;
-    padding:6px 8px;
-    border-radius:999px;
-    background:#020617;
-    border:1px solid #1f2937;
-    font-size:1rem;
-    font-variant-numeric:tabular-nums;
-  }
-
-  .pill-total{
-    background:#052e16;
-    border-color:#16a34a;
-    color:#bbf7d0;
-    min-width:56px;
-  }
-
-  .btn-mini{
-    width:36px;
-    height:36px;
-    border-radius:999px;
-    border:none;
-    font-size:1.4rem;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    color:white;
-  }
-  .btn-mini:active{transform:scale(.94);}
-
-  .btn-minus{background:#e11d48;}
-  .btn-plus{background:#0ea5e9;}
-  .btn-plus-round{background:#22c55e;}
-
-  .footer-bar{
-    margin-top:16px;
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-  }
-
-  .btn{
-    flex:1;
-    border:none;
-    border-radius:999px;
-    padding:12px;
-    font-size:1rem;
-    cursor:pointer;
-    text-align:center;
-  }
-  .btn-secondary{
-    background:#0f172a;
-    color:var(--text);
-    border:1px solid #1f2937;
-  }
-  .btn-danger{background:#f43f5e;color:white;}
-  .btn-success{background:#16a34a;color:white;}
-  .btn-export{background:#3b82f6;color:white;}
-
-  .round-input{
-    width:56px;
-    text-align:center;
-    border-radius:999px;
-    border:1px solid #1f2937;
-    background:#020617;
-    padding:6px 8px;
-    color:var(--text);
-    font-size:1rem;
-    font-variant-numeric:tabular-nums;
-  }
-
-  .round-info{
-    display:flex;
-    justify-content:flex-end;
-    align-items:center;
-    margin-bottom:10px;
-    gap:6px;
-    font-size:0.95rem;
-    color:var(--muted);
-  }
-
-  .round-badge{
-    padding:4px 10px;
-    border-radius:999px;
-    background:#0f172a;
-    border:1px solid #1f2937;
-    font-weight:600;
-    color:#e5e7eb;
-  }
-
-  .app{
-    width:100%;
-    max-width:900px;
-    margin:0 auto;
-  }
-
+:root{
+  --bg:#edf7f6; --bg2:#dbeef3; --card:#ffffffdd; --card2:#f7fbfb;
+  --text:#102235; --muted:#5d7380; --line:#c7dbe1;
+  --navy:#17314a; --teal:#3fb7a5; --mint:#8fd8bd; --yellow:#f4bd45; --orange:#ef7d45; --red:#e85d63;
+  --shadow:0 18px 45px rgba(23,49,74,.16); --radius:22px;
+}
+html[data-theme="dark"]{
+  --bg:#020712; --bg2:#07111f; --card:#0b1726ee; --card2:#0e2031;
+  --text:#e9f5f7; --muted:#91a9b5; --line:#1c3548;
+  --shadow:0 20px 48px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%;margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{
+  padding:calc(12px + env(safe-area-inset-top)) 12px calc(18px + env(safe-area-inset-bottom));
+  background:
+    radial-gradient(circle at 20% 0%, rgba(143,216,189,.55), transparent 32%),
+    radial-gradient(circle at 90% 10%, rgba(244,189,69,.36), transparent 28%),
+    linear-gradient(135deg,var(--bg),var(--bg2));
+}
+html[data-theme="dark"] body{
+  background:
+    radial-gradient(circle at 20% 0%, rgba(63,183,165,.22), transparent 30%),
+    radial-gradient(circle at 90% 5%, rgba(244,189,69,.12), transparent 26%),
+    linear-gradient(135deg,#010409,#07111f 55%,#020712);
+}
+.app{width:100%;max-width:720px;margin:0 auto}.top{display:flex;align-items:center;gap:12px;margin-bottom:12px}.logo{width:62px;height:62px;border-radius:18px;box-shadow:var(--shadow);background:#fff}.title{flex:1;min-width:0}h1{font-size:1.55rem;line-height:1.1;margin:0;color:var(--navy)}html[data-theme="dark"] h1{color:#e9f5f7}.sub{margin:4px 0 0;color:var(--muted);font-size:.92rem}.icon-btn{border:1px solid var(--line);background:var(--card);color:var(--text);width:42px;height:42px;border-radius:999px;font-size:1.1rem;box-shadow:0 8px 20px rgba(23,49,74,.12);cursor:pointer}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px;margin:10px 0;backdrop-filter:blur(12px)}.game-bar{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.game-name{width:100%;border:1px solid var(--line);border-radius:16px;background:var(--card2);color:var(--text);font-size:1rem;padding:10px 12px;font-weight:700}.round-pill{white-space:nowrap;border:1px solid rgba(63,183,165,.45);background:linear-gradient(135deg,rgba(63,183,165,.18),rgba(244,189,69,.12));padding:9px 12px;border-radius:999px;font-weight:800;color:var(--navy)}html[data-theme="dark"] .round-pill{color:#dbf7f1}.players{display:flex;flex-direction:column;gap:8px}.player-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--card2);border:1px solid var(--line);border-radius:18px;padding:8px}.player-name{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:999px;padding:8px 10px;font-size:.95rem}.controls{display:flex;align-items:center;gap:6px}.total{min-width:42px;text-align:center;border-radius:999px;background:var(--navy);color:white;font-weight:900;padding:7px 8px;font-variant-numeric:tabular-nums}.round-input{width:48px;text-align:center;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-weight:800;padding:7px 4px;font-size:.95rem}.btn-mini{width:34px;height:34px;border:0;border-radius:999px;color:white;font-size:1.25rem;font-weight:900;display:grid;place-items:center;cursor:pointer}.btn-mini:active,.btn:active,.icon-btn:active{transform:scale(.96)}.minus{background:var(--red)}.plus{background:var(--teal)}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.actions.three{grid-template-columns:1fr 1fr 1fr}.btn{border:0;border-radius:16px;padding:10px 11px;font-size:.94rem;font-weight:800;cursor:pointer;color:white;background:var(--navy);box-shadow:0 8px 18px rgba(23,49,74,.16)}.btn.teal{background:linear-gradient(135deg,var(--teal),#2c9d95)}.btn.yellow{background:linear-gradient(135deg,var(--yellow),var(--orange));color:#102235}.btn.red{background:linear-gradient(135deg,var(--red),#c9384d)}.btn.ghost{background:var(--card2);color:var(--text);border:1px solid var(--line);box-shadow:none}.section-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;color:var(--muted);font-size:.9rem;font-weight:800}.saves{display:flex;flex-direction:column;gap:8px}.save-row{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:8px}.save-title{font-weight:900}.save-meta{font-size:.78rem;color:var(--muted);margin-top:2px}.small-btn{border:0;border-radius:12px;padding:8px 10px;font-weight:900;cursor:pointer;background:var(--navy);color:white}.small-btn.delete{background:var(--red)}.empty{color:var(--muted);font-size:.9rem;text-align:center;padding:10px}.history{max-height:210px;overflow:auto}.history table{width:100%;border-collapse:collapse;font-size:.88rem}.history th,.history td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:right}.history th:first-child,.history td:first-child{text-align:left;color:var(--muted)}
+@media (max-width:520px){body{padding-left:8px;padding-right:8px}.logo{width:54px;height:54px}.card{padding:10px;border-radius:20px}.player-row{grid-template-columns:1fr}.controls{justify-content:space-between}.actions,.actions.three{grid-template-columns:1fr}.top{gap:9px}h1{font-size:1.34rem}.btn{padding:10px}.save-row{grid-template-columns:1fr auto}.save-row .delete{grid-column:2}.round-input{width:54px}.total{min-width:50px}}
 </style>
 </head>
-
 <body>
 <div class="app">
+  <header class="top">
+    <img class="logo" src="assets/icons/icon-192.png" alt="Ikona aplikace">
+    <div class="title"><h1>Počítadlo kol</h1><p class="sub">Skóre hráčů, kola a uložené rozehrané hry.</p></div>
+    <button class="icon-btn" id="themeToggle" title="Přepnout režim">🌙</button>
+  </header>
 
-<h1>Počítadlo bodů</h1>
-<p class="sub">Vyber typ počítadla, který chceš použít.</p>
+  <section class="card">
+    <div class="game-bar">
+      <input id="gameName" class="game-name" placeholder="Název hry" autocomplete="off">
+      <div class="round-pill">Kolo <span id="roundNumber">1</span></div>
+    </div>
+  </section>
 
-<div class="tabs-wrap">
-  <button id="tabSimple" class="tab-btn active">Jednoduché počítadlo</button>
-  <button id="tabRounds" class="tab-btn">Počítadlo na kola</button>
+  <section class="card">
+    <div class="section-title"><span>Hráči</span><span>Celkem / toto kolo</span></div>
+    <div id="players" class="players"></div>
+    <div class="actions" style="margin-top:10px">
+      <button class="btn ghost" id="addPlayer">+ Přidat hráče</button>
+      <button class="btn teal" id="nextRound">Uložit kolo</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="actions three">
+      <button class="btn yellow" id="saveGame">💾 Uložit hru</button>
+      <button class="btn ghost" id="newGame">Nová hra</button>
+      <button class="btn red" id="resetScores">Vynulovat</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-title"><span>Uložené hry</span><span id="saveCount"></span></div>
+    <div id="saves" class="saves"></div>
+  </section>
+
+  <section class="card">
+    <div class="section-title"><span>Historie kol aktuální hry</span><span id="historyCount"></span></div>
+    <div id="history" class="history empty">Zatím není uložené žádné kolo.</div>
+  </section>
 </div>
-
-<div id="viewSimple">
-  <div id="simplePlayers" class="players"></div>
-
-  <div class="footer-bar">
-    <button class="btn btn-secondary" id="btnAddSimple">+ Přidat hráče</button>
-    <button class="btn btn-danger" id="btnResetSimple">Vynulovat všechny</button>
-    <button class="btn btn-export" id="btnExportSimple">Export PDF</button>
-  </div>
-</div>
-
-<div id="viewRounds" class="hidden">
-
-  <div class="round-info">
-    <span>Aktuální kolo:</span>
-    <span class="round-badge" id="roundNumber">1</span>
-  </div>
-
-  <div id="roundPlayers" class="players"></div>
-
-  <div class="footer-bar">
-    <button class="btn btn-secondary" id="btnAddRound">+ Přidat hráče</button>
-    <button class="btn btn-success" id="btnNextRound">Další kolo</button>
-  </div>
-
-  <div class="footer-bar">
-    <button class="btn btn-danger" id="btnResetRounds">Vynulovat všechny</button>
-    <button class="btn btn-export" id="btnExportRounds">Export PDF</button>
-  </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
+const STORAGE_THEME='pocitadlo_theme_v1';
+const STORAGE_CURRENT='pocitadlo_current_game_v1';
+const STORAGE_SAVES='pocitadlo_saved_games_v1';
+const $=id=>document.getElementById(id);
+let game={id:crypto.randomUUID(),name:'Nová hra',round:1,players:[],history:[],updatedAt:Date.now()};
+let playerId=1;
 
-/* ---- Přepínání záložek ---- */
-const tabSimple=document.getElementById('tabSimple');
-const tabRounds=document.getElementById('tabRounds');
-const viewSimple=document.getElementById('viewSimple');
-const viewRounds=document.getElementById('viewRounds');
-
-tabSimple.onclick=()=>setTab('simple');
-tabRounds.onclick=()=>setTab('rounds');
-
-function setTab(t){
-  if(t==='simple'){
-    tabSimple.classList.add('active');
-    tabRounds.classList.remove('active');
-    viewSimple.classList.remove('hidden');
-    viewRounds.classList.add('hidden');
-  }else{
-    tabRounds.classList.add('active');
-    tabSimple.classList.remove('active');
-    viewRounds.classList.remove('hidden');
-    viewSimple.classList.add('hidden');
-  }
+function applyTheme(theme){
+  document.documentElement.dataset.theme=theme;
+  $('themeToggle').textContent=theme==='dark'?'☀️':'🌙';
+  $('themeColor').setAttribute('content',theme==='dark'?'#020712':'#15324a');
+  localStorage.setItem(STORAGE_THEME,theme);
 }
+function loadTheme(){applyTheme(localStorage.getItem(STORAGE_THEME)||'light')}
+$('themeToggle').onclick=()=>applyTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');
 
-/* ---- Jednoduché počítadlo ---- */
-const simpleContainer=document.getElementById('simplePlayers');
-let simplePlayers=[]; let simpleId=1;
-
-document.getElementById('btnAddSimple').onclick=()=>addSimple();
-document.getElementById('btnResetSimple').onclick=()=>{
-  simplePlayers.forEach(p=>p.score=0);
-  renderSimple();
+function defaultPlayers(){return [1,2,3,4].map(n=>({id:playerId++,name:'Hráč '+n,total:0,roundDelta:0}))}
+function saveCurrent(){game.updatedAt=Date.now();localStorage.setItem(STORAGE_CURRENT,JSON.stringify(game))}
+function loadCurrent(){
+  try{const saved=JSON.parse(localStorage.getItem(STORAGE_CURRENT)); if(saved&&saved.players){game=saved; playerId=Math.max(1,...game.players.map(p=>p.id||0))+1; return}}
+  catch(e){}
+  game.players=defaultPlayers();
+}
+function getSaves(){try{return JSON.parse(localStorage.getItem(STORAGE_SAVES))||[]}catch(e){return[]}}
+function setSaves(list){localStorage.setItem(STORAGE_SAVES,JSON.stringify(list))}
+function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function render(){
+  $('gameName').value=game.name||'';
+  $('roundNumber').textContent=game.round;
+  const box=$('players'); box.innerHTML='';
+  game.players.forEach((p,i)=>{
+    const row=document.createElement('div'); row.className='player-row';
+    row.innerHTML=`<input class="player-name" value="${esc(p.name)}" placeholder="Jméno hráče">
+    <div class="controls">
+      <div class="total" title="Celkem">${p.total}</div>
+      <button class="btn-mini minus" aria-label="Odečíst bod">−</button>
+      <input class="round-input" type="number" inputmode="numeric" value="${p.roundDelta}">
+      <button class="btn-mini plus" aria-label="Přičíst bod">+</button>
+    </div>`;
+    const name=row.querySelector('.player-name'); name.oninput=()=>{p.name=name.value;saveCurrent();renderSaves()};
+    row.querySelector('.minus').onclick=()=>{p.roundDelta--;saveCurrent();render()};
+    row.querySelector('.plus').onclick=()=>{p.roundDelta++;saveCurrent();render()};
+    const inp=row.querySelector('.round-input'); inp.onfocus=()=>inp.select(); inp.oninput=()=>{p.roundDelta=parseInt(inp.value)||0;saveCurrent()};
+    box.appendChild(row);
+  });
+  renderHistory(); renderSaves(); saveCurrent();
+}
+function renderHistory(){
+  $('historyCount').textContent=game.history.length?game.history.length+' kol':'';
+  if(!game.history.length){$('history').className='history empty';$('history').textContent='Zatím není uložené žádné kolo.';return}
+  $('history').className='history';
+  let html='<table><thead><tr><th>Kolo</th>'+game.players.map(p=>`<th>${esc(p.name||'Hráč')}</th>`).join('')+'</tr></thead><tbody>';
+  game.history.forEach((r,idx)=>{html+=`<tr><td>${idx+1}</td>`+game.players.map(p=>`<td>${r[p.id]??0}</td>`).join('')+'</tr>'});
+  html+='</tbody></table>';$('history').innerHTML=html;
+}
+function renderSaves(){
+  const saves=getSaves().sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
+  $('saveCount').textContent=saves.length?saves.length+' uložených':'';
+  const box=$('saves'); box.innerHTML='';
+  if(!saves.length){box.innerHTML='<div class="empty">Zatím tu není žádná uložená hra.</div>';return}
+  saves.forEach(s=>{
+    const row=document.createElement('div'); row.className='save-row';
+    const date=new Date(s.updatedAt||Date.now()).toLocaleString('cs-CZ',{dateStyle:'short',timeStyle:'short'});
+    row.innerHTML=`<div><div class="save-title">${esc(s.name||'Hra bez názvu')}</div><div class="save-meta">Kolo ${s.round} · ${s.players?.length||0} hráčů · ${date}</div></div><button class="small-btn load">Načíst</button><button class="small-btn delete">Smazat</button>`;
+    row.querySelector('.load').onclick=()=>{game=structuredClone(s);playerId=Math.max(1,...game.players.map(p=>p.id||0))+1;render()};
+    row.querySelector('.delete').onclick=()=>{if(confirm('Smazat uloženou hru?')){setSaves(getSaves().filter(x=>x.id!==s.id));renderSaves()}};
+    box.appendChild(row);
+  });
+}
+$('gameName').oninput=()=>{game.name=$('gameName').value;saveCurrent();renderSaves()};
+$('addPlayer').onclick=()=>{game.players.push({id:playerId++,name:'Hráč '+(game.players.length+1),total:0,roundDelta:0});render()};
+$('nextRound').onclick=()=>{
+  const row={}; game.players.forEach(p=>{row[p.id]=p.roundDelta;p.total+=p.roundDelta;p.roundDelta=0});
+  game.history.push(row); game.round++; render();
+};
+$('resetScores').onclick=()=>{if(confirm('Vynulovat skóre aktuální hry?')){game.players.forEach(p=>{p.total=0;p.roundDelta=0});game.history=[];game.round=1;render()}};
+$('newGame').onclick=()=>{if(confirm('Založit novou hru? Aktuální si nejdřív ulož, pokud ji chceš zachovat.')){playerId=1;game={id:crypto.randomUUID(),name:'Nová hra',round:1,players:defaultPlayers(),history:[],updatedAt:Date.now()};render()}};
+$('saveGame').onclick=()=>{
+  game.name=($('gameName').value||'Hra bez názvu').trim(); game.updatedAt=Date.now();
+  const saves=getSaves(); const idx=saves.findIndex(s=>s.id===game.id);
+  if(idx>=0)saves[idx]=structuredClone(game); else saves.push(structuredClone(game));
+  setSaves(saves); saveCurrent(); renderSaves();
 };
 
-function addSimple(){
-  simplePlayers.push({id:simpleId++,name:'',score:0});
-  renderSimple();
-}
-
-function renderSimple(){
-  simpleContainer.innerHTML='';
-  simplePlayers.forEach(p=>{
-    const row=document.createElement('div');
-    row.className='player-row';
-
-    const name=document.createElement('div');
-    name.className='player-name';
-    const inp=document.createElement('input');
-    inp.placeholder='Jméno hráče';
-    inp.value=p.name;
-    inp.oninput=()=>p.name=inp.value;
-    name.appendChild(inp);
-
-    const minus=document.createElement('button');
-    minus.className='btn-mini btn-minus';
-    minus.textContent='−';
-    minus.onclick=()=>{p.score--;renderSimple();};
-
-    const score=document.createElement('div');
-    score.className='pill';
-    score.textContent=p.score;
-
-    const plus=document.createElement('button');
-    plus.className='btn-mini btn-plus';
-    plus.textContent='+';
-    plus.onclick=()=>{p.score++;renderSimple();};
-
-    row.append(name,minus,score,plus);
-    simpleContainer.appendChild(row);
-  });
-}
-
-/* ---- Počítadlo na kola ---- */
-const roundContainer=document.getElementById('roundPlayers');
-const roundNumberEl=document.getElementById('roundNumber');
-let roundPlayers=[]; 
-let roundId=1;
-let currentRound=1;
-let roundHistory=[];
-
-document.getElementById('btnAddRound').onclick=()=>addRound();
-
-document.getElementById('btnNextRound').onclick=()=>{
-  roundHistory.push(roundPlayers.map(p=>p.roundDelta));
-
-  roundPlayers.forEach(p=>{
-    p.total += p.roundDelta;
-    p.roundDelta = 0;
-  });
-
-  currentRound++;
-  roundNumberEl.textContent=currentRound;
-  renderRounds();
-};
-
-function addRound(){
-  roundPlayers.push({id:roundId++,name:'',total:0,roundDelta:0});
-  renderRounds();
-}
-
-function renderRounds(){
-  roundContainer.innerHTML='';
-  roundPlayers.forEach(p=>{
-    const row=document.createElement('div');
-    row.className='player-row';
-    row.style.flexDirection='column';
-    row.style.padding='10px';
-
-    const nameWrap=document.createElement('div');
-    nameWrap.className='player-name';
-
-    const inp=document.createElement('input');
-    inp.placeholder='Jméno hráče';
-    inp.value=p.name;
-    inp.oninput=()=>p.name=inp.value;
-
-    nameWrap.appendChild(inp);
-
-    const controls=document.createElement('div');
-    controls.style.display='flex';
-    controls.style.gap='8px';
-    controls.style.alignItems='center';
-
-    const total=document.createElement('div');
-    total.className='pill pill-total';
-    total.textContent=p.total;
-
-    const minus=document.createElement('button');
-    minus.className='btn-mini btn-minus';
-    minus.textContent='−';
-    minus.onclick=()=>{p.roundDelta--;renderRounds();};
-
-    const inpRound=document.createElement('input');
-    inpRound.className='round-input';
-    inpRound.type='number';
-    inpRound.value=p.roundDelta;
-
-    inpRound.onfocus=()=>inpRound.select();
-
-    inpRound.oninput=()=>{
-      p.roundDelta=parseInt(inpRound.value)||0;
-    };
-
-    const plus=document.createElement('button');
-    plus.className='btn-mini btn-plus-round';
-    plus.textContent='+';
-    plus.onclick=()=>{p.roundDelta++;renderRounds();};
-
-    controls.append(total,minus,inpRound,plus);
-
-    row.append(nameWrap,controls);
-    roundContainer.appendChild(row);
-  });
-}
-
-/* ---- Export PDF (historie kol) ---- */
-document.getElementById('btnExportRounds').onclick=()=>exportRoundsPDF();
-
-function exportRoundsPDF(){
-
-  const element=document.createElement('div');
-
-  let html = `
-  <div style="font-family: Arial; color:#000;">
-    <h2>Historie kol</h2>
-    <table style="border-collapse:collapse; width:100%;">
-      <tr>
-        <th style="border:1px solid #000; padding:6px;">Kolo</th>
-  `;
-
-  // 🔥 HLAVIČKA = HRÁČI
-  roundPlayers.forEach((p,i)=>{
-    const name = (p.name && p.name.trim() !== '') ? p.name : ('Hráč ' + (i+1));
-    html += `<th style="border:1px solid #000; padding:6px;">${name}</th>`;
-  });
-
-  html += `</tr>`;
-
-  // 🔥 ŘÁDKY = KOLA
-  roundHistory.forEach((round,i)=>{
-    html += `<tr><td style="border:1px solid #000; padding:6px;">${i+1}</td>`;
-
-    roundPlayers.forEach((_,playerIndex)=>{
-      const val = round[playerIndex] || 0;
-      html += `<td style="border:1px solid #000; padding:6px; text-align:right;">${val}</td>`;
-    });
-
-    html += `</tr>`;
-  });
-
-  // 🔥 SOUČTY
-  html += `<tr><td style="border:1px solid #000; padding:6px;"><b>Celkem</b></td>`;
-
-  roundPlayers.forEach((p,i)=>{
-    let sum = 0;
-    roundHistory.forEach(r=>{
-      sum += r[i] || 0;
-    });
-    html += `<td style="border:1px solid #000; padding:6px; text-align:right;"><b>${sum}</b></td>`;
-  });
-
-  html += `</tr>`;
-
-  html += `</table></div>`;
-
-  element.innerHTML=html;
-  document.body.appendChild(element);
-
-  const opt={
-    margin:10,
-    filename:'historie.pdf',
-    html2canvas:{scale:2},
-    jsPDF:{unit:'mm',format:'a4',orientation:'landscape'} // 🔥 na šířku!
-  };
-
-  setTimeout(()=>{
-    html2pdf().set(opt).from(element).save().then(()=>{
-      document.body.removeChild(element);
-    });
-  }, 150);
-}
-
-/* start */
-addSimple();
-addRound();
-
+loadTheme(); loadCurrent(); render();
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'))}
 </script>
-
-</div>
 </body>
 </html>

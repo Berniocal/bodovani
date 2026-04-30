@@ -88,7 +88,7 @@ const STORAGE_THEME='pocitadlo_theme_v1';
 const STORAGE_CURRENT='pocitadlo_current_game_v1';
 const STORAGE_SAVES='pocitadlo_saved_games_v1';
 const $=id=>document.getElementById(id);
-let game={id:crypto.randomUUID(),name:'Nová hra',round:1,players:[],history:[],updatedAt:Date.now()};
+let game={id: Date.now().toString() + Math.random().toString(36).slice(2),name:'Nová hra',round:1,players:[],history:[],updatedAt:Date.now()};
 let playerId=1;
 
 function applyTheme(theme){

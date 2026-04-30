@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pocitadlo-kol-v1.3.0';
+const CACHE_NAME = 'pocitadlo-kol-v1.4.0';
 const APP_SHELL = [
   './',
   './index.html',
@@ -7,8 +7,8 @@ const APP_SHELL = [
   './assets/icons/icon-32.png',
   './assets/icons/icon-64.png',
   './assets/icons/icon-192.png',
-  './assets/icons/icon-512.jpg',
-  './assets/icons/maskable-512.jpg'
+  './assets/icons/icon-512.png',
+  './assets/icons/maskable-512.png'
 ];
 
 self.addEventListener('install', event => {
